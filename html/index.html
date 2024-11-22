@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Spreadsheet string replacer</title>
+    </head>
+    <body>
+        <form id = "userForm" method="post" target="_blank">
+            <!-- 後々隠す -->
+            <p>後々隠す</p>
+            <input type="text" id="url" name="url">
+            <input type = "submit" id = "userFormSubmit">
+            <br><br><br>
+
+            <table id = "urlTable">
+                <tbody>
+                </tbody>
+            </table>
+
+            <br>
+            <label for="before">検索文字列:</label>
+            <input type="text" id="before" name="before">
+        
+            <br>
+            <label for="after">置換文字列:</label>
+            <input type="text" id="after" name="after">
+
+            <br>
+            <br>
+            <div id = "submitButton">実行</div>
+        </form>
+        
+        <script type = "text/javascript" src = "./script.js"></script>
+    </body>
+</html>
