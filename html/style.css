@@ -1,0 +1,116 @@
+body{
+    font-family: "Noto Sans JP", sans-serif;
+    font-weight: 500;
+    font-size: 25px;
+    background-color: rgb(247, 255, 254);
+    color: rgb(9, 41, 37);
+}
+
+input, textarea{
+    border: solid 1px rgb(9, 41, 37);
+}
+
+hr{
+    border: none;           /* デフォルトの枠線を削除 */
+    border-top: 1px solid rgb(9, 41, 37);
+}
+
+/*************************************************************************************************/
+
+/*  */
+
+/*************************************************************************************************/
+
+/* テーブルの横幅設定 */
+table{
+    width: 90%;
+}
+tbody{
+    width: 100%;
+}
+.tdLabel{
+    width: 25%;
+}
+.tdInput{
+    width: 75%;
+}
+
+/*************************************************************************************************/
+
+/* url入力欄 */
+.urls{
+    font-family: Consolas, 'Courier New', Courier, Monaco, monospace;
+    font-weight: 500;
+    font-size: 15px;
+    width: 100%;
+}
+
+/*************************************************************************************************/
+
+/* 置換文字列入力欄 */
+.replaceLabel{
+    display: inline-block;
+    width: 22.5%;
+    padding: 0;
+    margin: 0;
+}
+
+.replaceInput{
+    font-family: Consolas, 'Courier New', Courier, Monaco, monospace;
+    font-weight: 500;
+    font-size: 15px;
+    width: 67.5%;
+    padding: 0;
+    margin: 0;
+}
+
+/*************************************************************************************************/
+
+/* ユーザ向けでないform要素を隠す */
+#url, #userFormSubmit{
+    display: none;
+}
+
+/*************************************************************************************************/
+
+/* 実行ボタン */
+#submitButton{
+    margin-left: 12.5%;
+    text-align: center;
+    display: inline-block;
+    width: 75%;
+    background: linear-gradient(to right, rgb(13, 168, 142), rgb(34, 156, 204));
+    color: white;
+    border-radius: 10000px;
+    padding: 0.25em;
+    font-weight: 800;
+    font-size: 30px;
+
+}
+
+/*************************************************************************************************/
+
+/* スマホ向け */
+@media (max-width: 768px) {
+    body{
+        font-family: "Noto Sans JP", sans-serif;
+        font-weight: 500;
+        font-size: 15px;
+    }
+    .tdLabel{
+        width: 50%;
+    }
+    .tdInput{
+        width: 50%;
+    }
+    .replaceLabel{
+        width: 45%;
+    }
+    .urls{
+        font-size: 10px;
+    }
+    .replaceInput{
+        font-size: 10px;
+        width: 45%;
+    }
+}

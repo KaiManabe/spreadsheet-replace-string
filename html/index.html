@@ -3,15 +3,20 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel = "stylesheet" type = "text/css" href = "style.css" />
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet">
         <title>Spreadsheet string replacer</title>
     </head>
     <body>
+        <h1>SpreadSheet 文字列置換機</h1>
+        <hr>
+        <h2>置換を行うSpreadSheetのURLを入力</h2>
         <form id = "userForm" method="post" target="_blank">
-            <!-- 後々隠す -->
-            <p>後々隠す</p>
+            <!-- cssで非表示にする -->
             <input type="text" id="url" name="url">
             <input type = "submit" id = "userFormSubmit">
-            <br><br><br>
 
             <table id = "urlTable">
                 <tbody>
@@ -19,14 +24,20 @@
             </table>
 
             <br>
-            <label for="before">検索文字列:</label>
-            <input type="text" id="before" name="before">
+            <br>
+            <hr>
+            <h2>置換対象・置換後の文字列を入力</h2>
+            <label for="before" class = "replaceLabel">検索文字列:</label>
+            <textarea id="before" name="before" class = "replaceInput"></textarea>
         
             <br>
-            <label for="after">置換文字列:</label>
-            <input type="text" id="after" name="after">
+            <br>
+            <label for="after" class = "replaceLabel">置換文字列:</label>
+            <textarea id="after" name="after" class = "replaceInput"></textarea>
 
             <br>
+            <br>
+            <hr>
             <br>
             <div id = "submitButton">実行</div>
         </form>

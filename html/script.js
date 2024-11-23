@@ -25,10 +25,13 @@ function addSheetURL(){
     newCellRight.appendChild(newInput);
 
     // 要素の属性設定
+    newCellLeft.classList.add("tdLabel");
+    newCellRight.classList.add("tdInput");
+
     newRow.id = `row_${String(window.urlCount).padStart(2, "0")}`;
     
     newLabel.setAttribute("for", `url_${String(window.urlCount).padStart(2, "0")}`);
-    newLabel.innerHTML = `url (${String(window.urlCount + 1)})`;
+    newLabel.innerHTML = `URL (${String(window.urlCount + 1)})`;
 
     newInput.id = `url_${String(window.urlCount).padStart(2, "0")}`;
     newInput.placeholder = "https://docs.google.com/spreadsheets/d/XXXXXXXXXXXXXXXXXXXXXXXX/edit";
