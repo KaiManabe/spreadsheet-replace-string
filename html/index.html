@@ -10,30 +10,47 @@
         <title>Spreadsheet string replacer</title>
     </head>
     <body>
+        <!--======================= タイトル=======================-->
         <h1>SpreadSheet 文字列置換機</h1>
+
         <hr>
+        <!--======================= 説明文 =======================-->
+        <h2>使い方</h2>
+        <ol>
+            <li>あいうえお</li>
+            <li>かきくけこ</li>
+            <li>さしすせそ</li>
+        </ol>
+        
+        <hr>
+
+        <!--======================= ユーザ入力フォーム =======================-->
         <h2>置換を行うSpreadSheetのURLを入力</h2>
         <form id = "userForm" method="post" target="_blank">
-            <!-- cssで非表示にする -->
-            <input type="text" id="url" name="url">
-            <input type = "submit" id = "userFormSubmit">
 
-            <table id = "urlTable">
-                <tbody>
-                </tbody>
-            </table>
+            <!--======================= hidden by css =======================-->
+            <input type="text" id="url" class = "hidden" name="url">
+            <input type = "submit" id = "userFormSubmit" class = "hidden" >
+            <!--=============================================================-->
 
-            <br>
-            <br>
-            <hr>
-            <h2>置換対象・置換後の文字列を入力</h2>
-            <label for="before" class = "replaceLabel">検索文字列:</label>
-            <textarea id="before" name="before" class = "replaceInput"></textarea>
+            <textarea id = "userFormUrl"></textarea>
+
+
+            <!--======================= hidden by css =======================-->
+            <div class = "hidden" >
+                <br>
+                <br>
+                <hr>
+                <h2>置換対象・置換後の文字列を入力</h2>
+                <label for="before" class = "replaceLabel">検索文字列:</label>
+                <textarea id="before" name="before" class = "replaceInput"></textarea>
         
-            <br>
-            <br>
-            <label for="after" class = "replaceLabel">置換文字列:</label>
-            <textarea id="after" name="after" class = "replaceInput"></textarea>
+                <br>
+                <br>
+                <label for="after" class = "replaceLabel">置換文字列:</label>
+                <textarea id="after" name="after" class = "replaceInput"></textarea>
+           </div>
+           <!--=============================================================-->
 
             <br>
             <br>

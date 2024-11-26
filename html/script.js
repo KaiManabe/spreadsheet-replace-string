@@ -1,79 +1,88 @@
+/**********************************************************************************************************
+ * 設定必須の定数
+**********************************************************************************************************/
 // デプロイしたGASAPIのURL
-const API_URL = "https://script.google.com/macros/s/AKfycbzP9R-sJe2nqGlnehdkvr-AxwA87cFXZ9AcsstiZPAn4y-EFWUU7orRiGT3WFSNRWfe/exec";
+const API_URL = "";
 
+// URL入力欄に表示される文字列
+const USERFORM_PLACEHOLDER = "";
+
+// URL入力欄のサイズ (em)
+const USERFORM_WIDTH = 50;
+const USERFORM_HEIGHT = 10;
+
+// spreadsheetのURL判定用正規表現
+const IS_SPREADSHEET = r = /^https:\/\/docs\.google\.com\/spreadsheets\/d\/[a-zA-Z0-90_]+/;
+
+// 確認用ポップアップの文言
+const CONFIRM_STRING = "入力されたスプレッドシートに対して置換を実行します";
+
+/**********************************************************************************************************
+ * グローバル変数
+ **********************************************************************************************************/
 // ユーザが設定したURLの数
 window.urlCount = 0;
 
 
-/**
- * urlの入力フォームを追加する
- */
-function addSheetURL(){
-    // 要素作成
-    const urlTbody = document.querySelector("#urlTable tbody");
-    let newRow = document.createElement("tr");
-    let newCellLeft = document.createElement("td");
-    let newCellRight = document.createElement("td");
-    let newLabel = document.createElement("label");
-    let newInput = document.createElement("input");
-
-    // 要素追加
-    urlTbody.appendChild(newRow);
-    newRow.appendChild(newCellLeft);
-    newRow.appendChild(newCellRight);
-    newCellLeft.appendChild(newLabel);
-    newCellRight.appendChild(newInput);
-
-    // 要素の属性設定
-    newCellLeft.classList.add("tdLabel");
-    newCellRight.classList.add("tdInput");
-
-    newRow.id = `row_${String(window.urlCount).padStart(2, "0")}`;
-    
-    newLabel.setAttribute("for", `url_${String(window.urlCount).padStart(2, "0")}`);
-    newLabel.innerHTML = `URL (${String(window.urlCount + 1)})`;
-
-    newInput.id = `url_${String(window.urlCount).padStart(2, "0")}`;
-    newInput.placeholder = "https://docs.google.com/spreadsheets/d/XXXXXXXXXXXXXXXXXXXXXXXX/edit";
-    newInput.classList.add("urls");
-
-    // 一番下のフォームが入力されたら新たな入力欄を追加
-    let currentIndex = window.urlCount;
-    newInput.addEventListener("change", function(){
-        if(currentIndex == window.urlCount - 1) addSheetURL();
-    });
-
-    window.urlCount++;
-}
-
+/**********************************************************************************************************
+ * 関数定義
+ **********************************************************************************************************/
 
 /**
  * ボタンを押されたときに実行
  * urlをjson形式にしてPOST送信
  */
 function submitForm(){
+    // 入力されたurlをチェック
     urls = [];
-
-    let inputs = document.querySelectorAll(".urls");
+    let invalidUrls = [];
+    let inputs = document.querySelector("#userFormUrl").value.split("\n");
     for(let i = 0; i < inputs.length; ++i){
-        let url = inputs[i].value;
-        if(url == "") continue;
-        urls.push(url);
+        if(IS_SPREADSHEET.test(inputs[i])){
+            urls.append(inputs[i]);
+        }else if(inputs[i].replace(" ", "") != ""){
+            invalidUrls.append(inputs[i]);
+        }
     }
-    document.querySelector("#url").value = JSON.stringify(urls);
 
-    document.querySelector("#userFormSubmit").click();
+    // 無効なurlが含まれている場合には警告
+    if(invalidUrls.length > 0){
+        let alertString = INVALID_URL_ALERT_STRING
+        for(let i = 0; i < invalidUrls.length; ++i){
+            alertString += "\n";
+            alertString += invalidUrls[i];
+        }
+        window.alert(alertString);
+    }
+    
+    // 確認ポップアップを出し、OKが押されたらAPIを叩く
+    if(window.confirm(CONFIRM_STRING)){
+        document.querySelector("#url").value = JSON.stringify(urls);
+        document.querySelector("#userFormSubmit").click();
+    }
+
 }
 
 
-
+/**********************************************************************************************************
+ * ページ読み込み完了時のコールバック
+ **********************************************************************************************************/
 window.addEventListener("load", function(){
     /** formのaction属性を設定 */
     const FORM = document.querySelector("#userForm");
     FORM.setAttribute("action", API_URL);
 
-    /** urlの1行目を作成 */
-    addSheetURL();
+    /** placeholderをセット */
+    const USERFORM_URL = document.querySelector("#userFormUrl");
+    USERFORM_URL.setAttribute("placeholder", USERFORM_PLACEHOLDER);
+
+    /** USERFORMの大きさを設定 */
+    USERFORM_URL.style.width = USERFORM_WIDTH + "rem";
+    USERFORM_URL.style.height = USERFORM_HEIGHT + "rem";
+
+    if(API_URL == ""){
+        window.alert("GAS APIのURLが設定されていません")
+    }
 
     /** ボタンにイベントリスナを仕込む */
     document.querySelector("#submitButton").addEventListener("click", submitForm);
