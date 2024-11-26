@@ -17,6 +17,9 @@ const IS_SPREADSHEET = r = /^https:\/\/docs\.google\.com\/spreadsheets\/d\/[a-zA
 // 確認用ポップアップの文言
 const CONFIRM_STRING = "入力されたスプレッドシートに対して置換を実行します";
 
+// 無効なURLを警告するポップアップの文言
+const INVALID_URL_ALERT_STRING = "無効なURLが含まれています\nこれらのURLは無視されます";
+
 /**********************************************************************************************************
  * グローバル変数
  **********************************************************************************************************/
@@ -39,9 +42,9 @@ function submitForm(){
     let inputs = document.querySelector("#userFormUrl").value.split("\n");
     for(let i = 0; i < inputs.length; ++i){
         if(IS_SPREADSHEET.test(inputs[i])){
-            urls.append(inputs[i]);
+            urls.push(inputs[i]);
         }else if(inputs[i].replace(" ", "") != ""){
-            invalidUrls.append(inputs[i]);
+            invalidUrls.push(inputs[i]);
         }
     }
 
@@ -56,7 +59,7 @@ function submitForm(){
     }
     
     // 確認ポップアップを出し、OKが押されたらAPIを叩く
-    if(window.confirm(CONFIRM_STRING)){
+    if(urls.length > 0 && window.confirm(CONFIRM_STRING)){
         document.querySelector("#url").value = JSON.stringify(urls);
         document.querySelector("#userFormSubmit").click();
     }
