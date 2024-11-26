@@ -10,6 +10,9 @@ function doPost(e){
     const REPLACE_AFTER = e.parameter.after;
     
     replace(URL, REPLACE_BEFORE, REPLACE_AFTER);
+
+    //適当な文言を返す
+    return ContentService.createTextOutput("置換に成功しました．このタブは閉じてください．").setMimeType(ContentService.MimeType.TEXT);
 }
   
 
@@ -29,21 +32,23 @@ for(let i = 0; i < url.length; ++i){
 
     /** すべてのシートに対して実行 */
     for(let j = 0; j < sheets.length; ++j){
-    let s = sheets[j];
-    const data = s.getDataRange().getValues();
+      let s = sheets[j];
+      let data = s.getDataRange().getValues();
 
-    /** すべてのセルに対して実行 */
-    for(let r = 0; r < data.length; ++r){
+      /** すべてのセルに対して実行 */
+      for(let r = 0; r < data.length; ++r){
         for(let c = 0; c < data[r].length; ++c){
-        cellValue = s.getRange(r+1,c+1).getValue();
-        if(typeof cellValue === "string" && cellValue != ""){
-            replacedValue = cellValue.replaceAll(before, after);
-            if(replacedValue != cellValue){
-            s.getRange(r+1, c+1).setValue(replacedValue);
-            }
+          cellValue = data[r][c];
+          if(typeof cellValue === "string" && cellValue != ""){
+              replacedValue = cellValue.replaceAll(before, after);
+              if(replacedValue != cellValue){
+                data[r][c] = replacedValue;
+              }
+          }
         }
-        }
-    }/** すべてのセルに対して実行 */
+      }/** すべてのセルに対して実行 */
+      s.getDataRange().setValues(data);
+
     }/** すべてのシートに対して実行 */
 }/** すべてのブックに対して実行 */
 }
