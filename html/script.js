@@ -7,6 +7,12 @@ const API_URL = "";
 // URL入力欄に表示される文字列
 const USERFORM_PLACEHOLDER = "";
 
+// 置換前文字列
+const REPLACE_BEFORE_DEFAULT = "";
+
+// 置換後文字列
+const REPLACE_AFTER_DEFAULT = "";
+
 // URL入力欄のサイズ (em)
 const USERFORM_WIDTH = 50;
 const USERFORM_HEIGHT = 10;
@@ -78,6 +84,12 @@ window.addEventListener("load", function(){
     /** placeholderをセット */
     const USERFORM_URL = document.querySelector("#userFormUrl");
     USERFORM_URL.setAttribute("placeholder", USERFORM_PLACEHOLDER);
+
+    /** 初期値をセット */
+    const USERFORM_BEFORE = document.querySelector("#before");
+    USERFORM_BEFORE.value = REPLACE_BEFORE_DEFAULT;
+    const USERFORM_AFTER = document.querySelector("#after");
+    USERFORM_AFTER.value = REPLACE_AFTER_DEFAULT;
 
     /** USERFORMの大きさを設定 */
     USERFORM_URL.style.width = USERFORM_WIDTH + "rem";
