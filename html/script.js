@@ -2,16 +2,16 @@
  * 設定必須の定数
 **********************************************************************************************************/
 // デプロイしたGASAPIのURL
-const API_URL = "";
+const API_URL = "expampleurl,com";
 
 // URL入力欄に表示される文字列
 const USERFORM_PLACEHOLDER = "";
 
-// 置換前文字列
-const REPLACE_BEFORE_DEFAULT = "";
-
-// 置換後文字列
-const REPLACE_AFTER_DEFAULT = "";
+// 置換前後文字列
+const REPLACEMENT_STRING = [
+    {"before": "置換前1", "after": "置換後1"},
+    {"before": "置換前2", "after": "置換後2"}
+];
 
 // URL入力欄のサイズ (em)
 const USERFORM_WIDTH = 50;
@@ -86,10 +86,8 @@ window.addEventListener("load", function(){
     USERFORM_URL.setAttribute("placeholder", USERFORM_PLACEHOLDER);
 
     /** 初期値をセット */
-    const USERFORM_BEFORE = document.querySelector("#before");
-    USERFORM_BEFORE.value = REPLACE_BEFORE_DEFAULT;
-    const USERFORM_AFTER = document.querySelector("#after");
-    USERFORM_AFTER.value = REPLACE_AFTER_DEFAULT;
+    const FORM_REPLACEMENT_STRING = document.querySelector("#replacement");
+    FORM_REPLACEMENT_STRING.value = JSON.stringify(REPLACEMENT_STRING);
 
     /** USERFORMの大きさを設定 */
     USERFORM_URL.style.width = USERFORM_WIDTH + "rem";
