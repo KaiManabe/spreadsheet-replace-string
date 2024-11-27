@@ -6,13 +6,23 @@
  */
 function doPost(e){
     const URL = JSON.parse(e.parameter.url);
-    const REPLACE_BEFORE = e.parameter.before;
-    const REPLACE_AFTER = e.parameter.after;
+    const REPLACEMENT_STRING = JSON.parse(e.parameter.replacement);
     
-    replace(URL, REPLACE_BEFORE, REPLACE_AFTER);
+    let replaced = replace(URL, REPLACEMENT_STRING);
 
-    //適当な文言を返す
-    return ContentService.createTextOutput("置換に成功しました．このタブは閉じてください．").setMimeType(ContentService.MimeType.TEXT);
+    let resp = "次のスプレッドシートの置換が完了しました．\n";
+    for(let i = 0; i < replaced.length; ++i){
+      resp += replaced[i] + "\n";
+    }
+    if(replaced.length < URL.length){
+      resp += "\nGAS実行時間の制限により，次のスプレッドシートは処理が完了していません．\n";
+      for(let i = 0; i < URL.length; ++i){
+        if(replaced.indexOf(URL[i]) == -1){
+          resp += URL[i] + "\n";
+        }
+      } 
+    }
+    return ContentService.createTextOutput(resp).setMimeType(ContentService.MimeType.TEXT);
 }
   
 
@@ -20,13 +30,18 @@ function doPost(e){
  * すべてのブックのすべてのシートのすべてのセルに対し，置換を実行
  * 探索するセルの数が多いとそこそこの時間を要する
  * 
- * @param {Array<string>} url ブックのURL(配列)
- * @param {string} before 置換元文字列
- * @param {string} after 置換後文字列
+ * @param {Array<string>} url ブックのURL(JSON)
+ * @param {object} replacementString 置換前後文字列 (JSON)
+ * 
+ * @return {Array<string>} 置換が完了したURL
  */
-function replace(url, before, after){
-/** すべてのブックに対して実行 */
-for(let i = 0; i < url.length; ++i){
+function replace(url, replacementString){
+  let startTime = new Date();
+  let stop = false;
+  let replacedUrls = [];
+
+  /** すべてのブックに対して実行 */
+  for(let i = 0; i < url.length; ++i){
     let ss = SpreadsheetApp.openByUrl(url[i]);
     let sheets = ss.getSheets();
 
@@ -40,17 +55,44 @@ for(let i = 0; i < url.length; ++i){
         for(let c = 0; c < data[r].length; ++c){
           cellValue = data[r][c];
           if(typeof cellValue === "string" && cellValue != ""){
-              replacedValue = cellValue.replaceAll(before, after);
+              replacedValue = replaceString(cellValue, replacementString);
               if(replacedValue != cellValue){
                 data[r][c] = replacedValue;
               }
           }
+
+          /** 経過時間が5分を超えたら中止 */
+          let currentTime = new Date();
+          if(currentTime - startTime > 300000){
+            stop = true;
+            break;
+          }
         }
+        if(stop) break;
       }/** すべてのセルに対して実行 */
+      if(stop) break;
       s.getDataRange().setValues(data);
 
     }/** すべてのシートに対して実行 */
-}/** すべてのブックに対して実行 */
+    if(stop) break;
+    replacedUrls.push(url[i]);
+  }/** すべてのブックに対して実行 */
+  return replacedUrls;
+}
+
+
+/**
+ * JSONに基づいて複数回の置換を実行する
+ * 
+ * @param {string} original 置換元文字列
+ * @param {object} replacementString 置換前後の文字列 (JSON)
+ */
+function replaceString(original, replacementString){
+  let ret = original;
+  for(let i = 0; i < replacementString.length; ++i){
+    ret = ret.replaceAll(replacementString[i]["before"], replacementString[i]["after"]);
+  }
+  return ret;
 }
   
   
